@@ -5,6 +5,7 @@ add_subdirectory(transpose)
 add_subdirectory(reduce)
 add_subdirectory(kLoopFusion)
 add_subdirectory(kInputFusion)
+add_subdirectory(gemm)
 
 if(WIN32)
     set(MLIR_RUNNER_UTILS_DIR ${LLVM_BINARY_DIR}/bin)
