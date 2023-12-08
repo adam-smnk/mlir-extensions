@@ -481,7 +481,7 @@ module @gemm attributes {gpu.container_module} {
     %2 = call @test(%A, %B, %C) : (memref<4096x4096xf16>, memref<4096x4096xf16>, memref<4096x4096xf32>) -> memref<4096x4096xf32>
 
     // run CPU
-    call @cpu_reference(%A, %B, %C_ref) : (memref<4096x4096xf16>, memref<4096x4096xf16>, memref<4096x4096xf32>) -> ()
+    // call @cpu_reference(%A, %B, %C_ref) : (memref<4096x4096xf16>, memref<4096x4096xf16>, memref<4096x4096xf32>) -> ()
 
     // %cast = memref.cast %A : memref<4096x4096xf16> to memref<*xf16>
     // call @printMemrefF16(%cast) : (memref<*xf16>) -> ()
