@@ -744,13 +744,17 @@ public:
       lookupOrInsertIntrinsic(rewriter, opPtr, funcName, funcType);
       auto funcOp =
           rewriter.create<spirv::FunctionCallOp>(loc, retType, funcName, args);
-      if (rank == 2) {
-        rewriter.replaceOp(op, funcOp);
-      } else {
-        auto cast = rewriter.create<spirv::BitcastOp>(loc, op.getType(),
-                                                      funcOp->getResult(0));
-        rewriter.replaceOp(op, cast);
+
+      VectorType origType = cast<VectorType>(op.getType());
+      VectorType castTarget = VectorType::get(origType.getNumElements(), origType.getElementType());
+      Operation* newOp = funcOp;
+      if(castTarget != funcOp->getResult(0).getType()) {
+        newOp = rewriter.create<spirv::BitcastOp>(loc, castTarget,
+                                                  funcOp->getResult(0));
       }
+
+      op->replaceAllUsesWith(newOp->getResults());
+      rewriter.eraseOp(op);
     } else {
       if constexpr (isPrefetch)
         args.erase(args.begin() + 4);
@@ -783,8 +787,14 @@ public:
     auto lhsType = op.getLhs().getType().cast<VectorType>();
     auto rhsType = op.getRhs().getType().cast<VectorType>();
     auto resultType = op.getResultType().cast<VectorType>();
-    uint8_t rc = lhsType.getShape()[0];
-    uint8_t sd = lhsType.getShape()[1];
+    // llvm::errs() << "lhsType.getShape() size: " << lhsType.getShape().size() << "\n";
+    // llvm::errs() << "lhsType.getShape()[0]: " << lhsType.getShape()[0] << "\n";
+    // uint8_t rc = lhsType.getShape()[0];
+    // uint8_t sd = lhsType.getShape()[1];
+    // FIXME: After cast insertion from load_nd, the lhs is a flattened
+    //        vector <128xfloat>.
+    uint8_t rc = 8;
+    uint8_t sd = 8;
     // refer to IGC/visa/Common_ISA_util.cpp#87
     auto encodePrecision = [&](Type type) -> uint8_t {
       if (type == rewriter.getBF16Type())
@@ -805,7 +815,13 @@ public:
     auto info = rewriter.create<spirv::ConstantOp>(loc, rewriter.getI32Type(),
                                                    infoAttr);
     auto newResultType = encodeVectorType(rewriter, resultType).second;
-    SmallVector<Value, 4> args{adaptor.getRhs(), adaptor.getLhs(), info};
+    auto lhsTy = encodeVectorType(rewriter, lhsType).second;
+    auto rhsTy = encodeVectorType(rewriter, rhsType).second;
+    auto castLhs = lhsTy != adaptor.getLhs().getType() ?
+          rewriter.create<spirv::BitcastOp>(loc, lhsTy, adaptor.getLhs()) : adaptor.getLhs();
+    auto castRhs = rhsTy != adaptor.getRhs().getType() ?
+          rewriter.create<spirv::BitcastOp>(loc, rhsTy, adaptor.getRhs()) : adaptor.getRhs();
+    SmallVector<Value, 4> args{castRhs, castLhs, info};
     std::string funcName = "llvm_genx_dpas_nosrc0_";
     if (op.getAcc()) {
       funcName = "llvm_genx_dpas2_";
@@ -819,7 +835,7 @@ public:
       auto sdArg = createIntConstant(i32Type, sd);
       auto rcArg = createIntConstant(i32Type, rc);
       auto signless = createIntConstant(i32Type, 0);
-      args.assign({adaptor.getAcc(), adaptor.getRhs(), adaptor.getLhs(),
+      args.assign({adaptor.getAcc(), castRhs, castLhs,
                    prec1Arg, prec2Arg, sdArg, rcArg, signless, signless});
     }
     funcName += encodeVectorType(rewriter, resultType).first;
