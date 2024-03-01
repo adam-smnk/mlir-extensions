@@ -280,10 +280,21 @@ public:
                                                               surfaceH, idx3);
       payLoad = rewriter.create<spirv::VectorInsertDynamicOp>(loc, payLoad,
                                                               surfaceP, idx4);
+
+      // Helper from ViewLikeInterface.
+      auto getNumDynamicEntriesUpToIdx = [&](ArrayRef<int64_t> staticVals,
+                                       unsigned idx) -> unsigned {
+        return std::count_if(staticVals.begin(), staticVals.begin() + idx,
+                            [&](int64_t val) { return ShapedType::isDynamic(val); });
+      };
+
       auto createOffset = [&](unsigned idx) -> Value {
         Value val;
         if (ShapedType::isDynamic(op.getStaticOffsets()[idx])) {
-          val = op.getOffsets()[idx];
+          // Dynamic offset ID has to be computed as:
+          // staticOffsets.size() >= dynamicOffsets
+          auto dynamicId = getNumDynamicEntriesUpToIdx(op.getStaticOffsets(), idx);
+          val = op.getOffsets()[dynamicId];
           val = rewriter.create<arith::TruncIOp>(loc, i32Type, val);
         } else {
           val = createIntConstant(i32Type, op.getStaticOffsets()[idx]);
