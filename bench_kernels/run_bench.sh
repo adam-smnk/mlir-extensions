@@ -4,12 +4,12 @@ LLVM_ROOT=$(realpath ~/llvm-project)
 
 IMEX_ROOT=$(realpath ~/mlir-extensions)
 IMEX_RUNNER=$(realpath ${IMEX_ROOT}/build/bin/imex-runner.py)
-KERNELS_DIR=$(realpath ${IMEX_ROOT}/bench_kernels)
+KERNELS_DIR=$(realpath ${IMEX_ROOT}/build/bench_kernels)
 
 TPP_ROOT=$(realpath ~/tpp-mlir)
 TPP_RUN=$(realpath ${TPP_ROOT}/build/bin/tpp-run)
 
-CONFIG_FILE=$(realpath ${KERNELS_DIR}/gemm_benchmarks.txt)
+CONFIG_FILE=$(realpath ${IMEX_ROOT}/bench_kernels/gemm_benchmarks.txt)
 
 # Initial validation.
 if ! { [ -d ${IMEX_ROOT} ] || [ -f ${IMEX_RUNNER} ]; }; then
@@ -49,7 +49,11 @@ while read LINE || [[ -n $LINE ]]; do
   FILE=${KERNELS_DIR}/${TOKENS[0]}
   FLAGS=${TOKENS[@]:1}
 
+  # Lower input kernels to XeGPU dialect using TPP.
+  # Filter out possible error messages.
   MLIR_XEGPU=$(exec ${TPP_RUN} ${FILE} ${TPP_RUN_FLAGS} ${FLAGS} 2>&1 | sed '/Error:.*/d' )
+
+  # Use IMEX runner to finalize code generation and benchmark performance.
   echo "${MLIR_XEGPU}" | \
     exec env ${IMEX_ENV} python ${IMEX_RUNNER} ${IMEX_RUNNER_FLAGS} ${IMEX_SHARED_LIBS} \
          --pass-pipeline-file=${PIPELINE_FILE} 2>/dev/null | \
