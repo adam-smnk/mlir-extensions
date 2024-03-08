@@ -13,7 +13,8 @@ if ! [ -f ${TEMPLATE_FILE} ]; then
   exit 1
 fi
 
-OUT_DIR=$(dirname ${TEMPLATE_FILE})
+OUT_DIR=$(realpath ${IMEX_ROOT}/build/bench_kernels)
+mkdir -p ${OUT_DIR}
 
 # Kernel config.
 MBS=( 128 256 512 )
