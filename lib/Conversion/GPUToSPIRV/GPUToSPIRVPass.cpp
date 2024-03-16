@@ -26,6 +26,7 @@
 #include <mlir/Conversion/MathToSPIRV/MathToSPIRV.h>
 #include <mlir/Conversion/MemRefToSPIRV/MemRefToSPIRV.h>
 #include <mlir/Conversion/SCFToSPIRV/SCFToSPIRV.h>
+#include <mlir/Conversion/VectorToSPIRV/VectorToSPIRV.h>
 
 #include "mlir/Dialect/Arith/IR/Arith.h"
 #include "mlir/Dialect/GPU/IR/GPUDialect.h"
@@ -355,6 +356,7 @@ void GPUXToSPIRVPass::runOnOperation() {
     mlir::arith::populateArithToSPIRVPatterns(typeConverter, patterns);
     mlir::populateMemRefToSPIRVPatterns(typeConverter, patterns);
     mlir::populateFuncToSPIRVPatterns(typeConverter, patterns);
+    mlir::populateVectorToSPIRVPatterns(typeConverter, patterns);
     // ---------------------------------------
 
     // IMEX GPUToSPIRV extension
