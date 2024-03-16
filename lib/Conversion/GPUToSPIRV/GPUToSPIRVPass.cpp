@@ -382,6 +382,7 @@ void GPUXToSPIRVPass::runOnOperation() {
     mlir::populateMathToSPIRVPatterns(typeConverter, patterns);
     mlir::populateMemRefToSPIRVPatterns(typeConverter, patterns);
     mlir::populateFuncToSPIRVPatterns(typeConverter, patterns);
+    mlir::populateVectorToSPIRVPatterns(typeConverter, patterns);
     // ---------------------------------------
 
     // IMEX GPUToSPIRV extension
