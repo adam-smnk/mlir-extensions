@@ -1,0 +1,79 @@
+Driver initialized.
+zelLoaderGetVersions number of components found: 1
+Version 0
+Name: loader
+Major: 1
+Minor: 15
+Patch: 1
+Found ZE_DEVICE_TYPE_GPU device...
+Driver version: 17000340
+API version: 1.3
+Device::properties_t::stype : DEVICE_PROPERTIES
+Device::properties_t::pNext : 0x0
+Device::properties_t::type : ZE_DEVICE_TYPE_GPU
+Device::properties_t::vendorId : 32902
+Device::properties_t::deviceId : 3034
+Device::properties_t::flags : Device::{ PROPERTY_FLAG_ONDEMANDPAGING }
+Device::properties_t::subdeviceId : 0
+Device::properties_t::coreClockRate : 1550
+Device::properties_t::maxMemAllocSize : 48946688000
+Device::properties_t::maxHardwareContexts : 65536
+Device::properties_t::maxCommandQueuePriority : 0
+Device::properties_t::numThreadsPerEU : 8
+Device::properties_t::physicalEUSimdWidth : 16
+Device::properties_t::numEUsPerSubslice : 8
+Device::properties_t::numSubslicesPerSlice : 56
+Device::properties_t::numSlices : 1
+Device::properties_t::timerResolution : 80
+Device::properties_t::timestampValidBits : 36
+Device::properties_t::kernelTimestampValidBits : 32
+Device::properties_t::uuid : device_uuid_t::id : [ 134, 128, 218, 11, 47, 0, 0, 0, 51, 0, 0, 0, 0, 0, 0, 0 ]
+
+Device::properties_t::name : Intel(R) Data Center GPU Max 1100
+
+stype : DEVICE_COMPUTE_PROPERTIES
+pNext : 0x0
+maxTotalGroupSize : 1024
+maxGroupSizeX : 1024
+maxGroupSizeY : 1024
+maxGroupSizeZ : 1024
+maxGroupCountX : 4294967295
+maxGroupCountY : 4294967295
+maxGroupCountZ : 4294967295
+maxSharedLocalMemory : 131072
+numSubGroupSizes : 2
+subGroupSizes : [ 16, 32, 0, 0, 0, 0, 0, 0 ]
+
+stype : DEVICE_MEMORY_PROPERTIES
+pNext : 0x0
+flags : Device::{ 0 }
+maxClockRate : 3200
+maxBusWidth : 64
+totalSize : 48946688000
+name : HBM
+
+ze_device_memory_access_properties_t.stype : DEVICE_MEMORY_ACCESS_PROPERTIES
+ze_device_memory_access_properties_t.pNext : 0x0
+ze_device_memory_access_properties_t.hostAllocCapabilities : Device::{ MEMORY_ACCESS_CAP_FLAG_RW }
+ze_device_memory_access_properties_t.deviceAllocCapabilities : Device::{ MEMORY_ACCESS_CAP_FLAG_RW | MEMORY_ACCESS_CAP_FLAG_ATOMIC }
+ze_device_memory_access_properties_t.sharedSingleDeviceAllocCapabilities : Device::{ MEMORY_ACCESS_CAP_FLAG_RW | MEMORY_ACCESS_CAP_FLAG_ATOMIC }
+ze_device_memory_access_properties_t.sharedCrossDeviceAllocCapabilities : Device::{ MEMORY_ACCESS_CAP_FLAG_RW }
+ze_device_memory_access_properties_t.sharedSystemAllocCapabilities : Device::{ 0 }
+
+ze_device_cache_properties_t.stype : DEVICE_CACHE_PROPERTIES
+ze_device_cache_properties_t.pNext : 0x0
+ze_device_cache_properties_t.flags : Device::{ 0 }
+ze_device_cache_properties_t.cacheSize : 201326592
+
+ze_device_image_properties_t.stype : DEVICE_IMAGE_PROPERTIES
+ze_device_image_properties_t.pNext : 0x0
+ze_device_image_properties_t.maxImageDims1D : 0
+ze_device_image_properties_t.maxImageDims2D : 0
+ze_device_image_properties_t.maxImageDims3D : 0
+ze_device_image_properties_t.maxImageBufferSize : 0
+ze_device_image_properties_t.maxImageArraySlices : 0
+ze_device_image_properties_t.maxSamplers : 0
+ze_device_image_properties_t.maxReadImageArgs : 0
+ze_device_image_properties_t.maxWriteImageArgs : 0
+
+Congratulations, the device completed execution!
