@@ -1,0 +1,12 @@
+gemm_128_1024_1024.mlir
+gemm_128_2048_2048.mlir
+gemm_128_4096_4096.mlir
+gemm_128_8192_8192.mlir
+gemm_256_1024_1024.mlir
+gemm_256_2048_2048.mlir
+gemm_256_4096_4096.mlir
+gemm_256_8192_8192.mlir
+gemm_512_1024_1024.mlir
+gemm_512_2048_2048.mlir
+gemm_512_4096_4096.mlir
+gemm_512_8192_8192.mlir
