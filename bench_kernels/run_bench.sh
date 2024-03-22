@@ -39,7 +39,7 @@ LIB_SYCL=$(realpath ${IMEX_ROOT}/build/lib/libsycl-runtime.so)
 IMEX_SHARED_LIBS="--shared-libs=${LIB_MLIR},${LIB_IMEX},${LIB_SYCL}"
 IMEX_RUNNER_FLAGS="--requires=sycl-runtime --runner imex-cpu-runner -e entry --entry-point-result=void"
 
-IMEX_ENV="IMEX_ENABLE_LARGE_REG_FILE=1 IMEX_ENABLE_PROFILING=1"
+IMEX_ENV="IMEX_ENABLE_LARGE_REG_FILE=1 IMEX_ENABLE_PROFILING=1 IMEX_PROFILING_RUNS=1000 IMEX_PROFILING_WARMUPS=10"
 
 PIPELINE_FILE=$(realpath ${IMEX_ROOT}/benchmarks/pipelines/linalg-to-gpu.pp)
 
