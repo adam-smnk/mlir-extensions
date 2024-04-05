@@ -51,7 +51,8 @@ while read LINE || [[ -n $LINE ]]; do
 
   # Lower input kernels to XeGPU dialect using TPP.
   # Filter out possible error messages.
-  MLIR_XEGPU=$(exec ${TPP_RUN} ${FILE} ${TPP_RUN_FLAGS} ${FLAGS} 2>&1 | sed '/Error:.*/d' )
+  # Convert xegpux (present due to conflict with upstream) to downstream xegpu.
+  MLIR_XEGPU=$(exec ${TPP_RUN} ${FILE} ${TPP_RUN_FLAGS} ${FLAGS} 2>&1 | sed '/Error:.*/d' | sed 's/xegpux/xegpu/g' )
 
   # Use IMEX runner to finalize code generation and benchmark performance.
   echo "${MLIR_XEGPU}" | \
